@@ -1,23 +1,13 @@
 package main
 
 import (
-	"container/list"
-	"context"
 	"fmt"
-
-	// "fmt"
-	// "music_service/core"
-	// "os"
+	"music_service/service"
 	"database/sql"
-	// "fmt"
-	"music_service/core"
 	"net"
-	// "github.com/KhovalygTaraa/music_service/api"
+	"github.com/KhovalygTaraa/music_service/api"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
-	// "bufio"
-	// "strconv"
-	// "strings"
 )
 
 func main() {
@@ -27,28 +17,13 @@ func main() {
 		panic("DB connection error")
 	}
 	defer db.Close()
-	rows, err := db.Query("select * from playlist")
-	if err != nil {
-        panic(err)
-    }
-	playlist := list.New()
-	p := core.CreateSimplePlaylist("My favorite playlist", playlist, context.Background())
-	defer rows.Close()
-	for rows.Next() {
-		song := new(core.Song)
-		err = rows.Scan(&song.Id, &song.Duration, &song.Name, &song.Author)
-		if err != nil {
-			panic(err)
-		}
-		p.AddSong(song)
-	}
 
 	grpcServer := grpc.NewServer()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 9000))
 	if err != nil {
         panic(err)
     }
-	// api.RegisterMusicServiceServer(grpcServer, 
+	api.RegisterMusicServiceServer(grpcServer, service.NewService(db))
 	if err := grpcServer.Serve(lis); err != nil {
 		panic(err)
 	}

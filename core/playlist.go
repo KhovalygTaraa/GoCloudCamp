@@ -37,7 +37,7 @@ type SimplePlaylist struct {
 
 func CreateSimplePlaylist(name string, songs *list.List, ctx context.Context) *SimplePlaylist {
 	p := &SimplePlaylist{Name: name, Songs: songs, Ctx: ctx}
-
+	
 	p.coreMtx = new(sync.Mutex)
 	p.currentSongPlayTime = 0
 	p.isPlaying = false

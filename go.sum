@@ -1,3 +1,5 @@
+github.com/KhovalygTaraa/music_service/api v0.0.0-20230303132038-a558a72a5ab6 h1:oAAsiz5qVQywEu6RYyuc3ConS2coG9aIcFmHq+ELZP8=
+github.com/KhovalygTaraa/music_service/api v0.0.0-20230303132038-a558a72a5ab6/go.mod h1:GKsKhMDm6Of8PcUIFgN+lBoF4cuBcZls/YLhttJO/sQ=
 github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaSAoJOfIk=
 github.com/golang/protobuf v1.5.2 h1:ROPKBNFfQgOUMifHyP+KYbvpjbdoFNs+aK7DXlji0Tw=
 github.com/golang/protobuf v1.5.2/go.mod h1:XVQd3VNwM+JqD3oG2Ue2ip4fOMUkwXdXDdiuN0vRsmY=
