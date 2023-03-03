@@ -19,6 +19,8 @@ type Playlist interface {
 type Song struct {
 	Name string
 	Duration int
+	Author string
+	Id int
 }
 
 type SimplePlaylist struct {
