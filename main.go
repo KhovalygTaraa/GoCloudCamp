@@ -12,7 +12,7 @@ import (
 	// "fmt"
 	"music_service/core"
 	"net"
-
+	// "github.com/KhovalygTaraa/music_service/api"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 	// "bufio"
@@ -48,6 +48,7 @@ func main() {
 	if err != nil {
         panic(err)
     }
+	// api.RegisterMusicServiceServer(grpcServer, 
 	if err := grpcServer.Serve(lis); err != nil {
 		panic(err)
 	}

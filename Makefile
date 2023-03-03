@@ -1,3 +1,5 @@
+.PHONY: all test build docker proto
+
 all: build test
 
 build:
@@ -8,6 +10,6 @@ test:
 docker:
 	docker-compose up -d --build
 proto:
-	protoc -go_out=. --go_opt=paths=import \
+	protoc --go_out=. --go_opt=paths=import \
     --go-grpc_out=. --go-grpc_opt=paths=import \
     proto/main.proto

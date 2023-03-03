@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+package music_service.api;
+option go_package = "api/";
+
 message Song {
     string name = 1;
     int64 duration = 2;
@@ -10,12 +13,14 @@ message Playlist {
     repeated Song songs = 1;
 }
 
+message Empty {}
+
 service MusicService {
-    rpc Play() return();
-    rpc Pause() return();
-    rpc AddSong(Song) return();
-    // rpc DeleteSong(Song) retuen();
-    // rpc GetPlaylist() return(Playlist);
-    rpc Next() return();
-    rpc Prev() return();
+    rpc Play(Empty) returns(Empty);
+    rpc Pause(Empty) returns(Empty);
+    rpc AddSong(Song) returns(Empty);
+    // rpc DeleteSong(Song) returns();
+    // rpc GetPlaylist() returns(Playlist);
+    rpc Next(Empty) returns(Empty);
+    rpc Prev(Empty) returns(Empty);
 }
