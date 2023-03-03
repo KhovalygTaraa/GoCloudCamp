@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+message Song {
+    string name = 1;
+    int64 duration = 2;
+	string author = 3;
+}
+
+message Playlist {
+    repeated Song songs = 1;
+}
+
+service MusicService {
+    rpc Play() return();
+    rpc Pause() return();
+    rpc AddSong(Song) return();
+    // rpc DeleteSong(Song) retuen();
+    // rpc GetPlaylist() return(Playlist);
+    rpc Next() return();
+    rpc Prev() return();
+}

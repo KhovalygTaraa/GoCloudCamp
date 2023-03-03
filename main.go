@@ -3,14 +3,18 @@ package main
 import (
 	"container/list"
 	"context"
+	"fmt"
+
 	// "fmt"
 	// "music_service/core"
 	// "os"
 	"database/sql"
 	// "fmt"
 	"music_service/core"
+	"net"
 
 	_ "github.com/lib/pq"
+	"google.golang.org/grpc"
 	// "bufio"
 	// "strconv"
 	// "strings"
@@ -37,6 +41,15 @@ func main() {
 			panic(err)
 		}
 		p.AddSong(song)
+	}
+
+	grpcServer := grpc.NewServer()
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", 9000))
+	if err != nil {
+        panic(err)
+    }
+	if err := grpcServer.Serve(lis); err != nil {
+		panic(err)
 	}
 	// playlist.PushBack(&core.Song{Name: "Blue bird", Duration: 40})
 	// playlist.PushBack(&core.Song{Name: "All of you", Duration: 120})
