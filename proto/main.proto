@@ -15,12 +15,20 @@ message Playlist {
 
 message Empty {}
 
+message Response {
+    string data = 1;
+    int64 code = 2;
+    bool isOk = 3;
+}
+
 service MusicService {
-    rpc Play(Empty) returns(Empty);
-    rpc Pause(Empty) returns(Empty);
-    rpc AddSong(Song) returns(Empty);
-    // rpc DeleteSong(Song) returns();
-    // rpc GetPlaylist() returns(Playlist);
-    rpc Next(Empty) returns(Empty);
-    rpc Prev(Empty) returns(Empty);
+    rpc Play(Empty) returns(Response);
+    rpc Pause(Empty) returns(Response);
+    rpc AddSong(Song) returns(Response);
+    rpc DeleteSong(Song) returns(Response);
+    rpc GetPlaylist(Empty) returns(Playlist);
+    rpc GetSong(Song) returns(Song);
+    rpc UpdateSong(Song) returns(Response);
+    rpc Next(Empty) returns(Response);
+    rpc Prev(Empty) returns(Response);
 }

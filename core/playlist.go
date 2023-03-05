@@ -84,6 +84,7 @@ func (p *SimplePlaylist) Play() {
 }
 
 func (p *SimplePlaylist) Pause() {
+	fmt.Println("Paused")
 	if !p.isPlaying {
 		return
 	}
@@ -93,6 +94,7 @@ func (p *SimplePlaylist) Pause() {
 }
 func (p *SimplePlaylist) AddSong(song *Song) {
 	p.coreMtx.Lock()
+	fmt.Printf("New song added. Name: %s. Author: %s. Duration: %ds.", song.Name, song.Author, song.Duration)
 	p.Songs.PushBack(song)
 	p.coreMtx.Unlock()
 }

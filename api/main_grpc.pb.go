@@ -22,13 +22,15 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MusicServiceClient interface {
-	Play(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
-	Pause(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
-	AddSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Empty, error)
-	// rpc DeleteSong(Song) returns();
-	// rpc GetPlaylist() returns(Playlist);
-	Next(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
-	Prev(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error)
+	Play(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error)
+	Pause(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error)
+	AddSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Response, error)
+	DeleteSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Response, error)
+	GetPlaylist(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Playlist, error)
+	GetSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Song, error)
+	UpdateSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Response, error)
+	Next(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error)
+	Prev(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error)
 }
 
 type musicServiceClient struct {
@@ -39,8 +41,8 @@ func NewMusicServiceClient(cc grpc.ClientConnInterface) MusicServiceClient {
 	return &musicServiceClient{cc}
 }
 
-func (c *musicServiceClient) Play(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *musicServiceClient) Play(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/Play", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -48,8 +50,8 @@ func (c *musicServiceClient) Play(ctx context.Context, in *Empty, opts ...grpc.C
 	return out, nil
 }
 
-func (c *musicServiceClient) Pause(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *musicServiceClient) Pause(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/Pause", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,8 +59,8 @@ func (c *musicServiceClient) Pause(ctx context.Context, in *Empty, opts ...grpc.
 	return out, nil
 }
 
-func (c *musicServiceClient) AddSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *musicServiceClient) AddSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/AddSong", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -66,8 +68,44 @@ func (c *musicServiceClient) AddSong(ctx context.Context, in *Song, opts ...grpc
 	return out, nil
 }
 
-func (c *musicServiceClient) Next(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *musicServiceClient) DeleteSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/DeleteSong", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *musicServiceClient) GetPlaylist(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Playlist, error) {
+	out := new(Playlist)
+	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/GetPlaylist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *musicServiceClient) GetSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Song, error) {
+	out := new(Song)
+	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/GetSong", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *musicServiceClient) UpdateSong(ctx context.Context, in *Song, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/UpdateSong", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *musicServiceClient) Next(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/Next", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -75,8 +113,8 @@ func (c *musicServiceClient) Next(ctx context.Context, in *Empty, opts ...grpc.C
 	return out, nil
 }
 
-func (c *musicServiceClient) Prev(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *musicServiceClient) Prev(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
 	err := c.cc.Invoke(ctx, "/music_service.api.MusicService/Prev", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -88,13 +126,15 @@ func (c *musicServiceClient) Prev(ctx context.Context, in *Empty, opts ...grpc.C
 // All implementations must embed UnimplementedMusicServiceServer
 // for forward compatibility
 type MusicServiceServer interface {
-	Play(context.Context, *Empty) (*Empty, error)
-	Pause(context.Context, *Empty) (*Empty, error)
-	AddSong(context.Context, *Song) (*Empty, error)
-	// rpc DeleteSong(Song) returns();
-	// rpc GetPlaylist() returns(Playlist);
-	Next(context.Context, *Empty) (*Empty, error)
-	Prev(context.Context, *Empty) (*Empty, error)
+	Play(context.Context, *Empty) (*Response, error)
+	Pause(context.Context, *Empty) (*Response, error)
+	AddSong(context.Context, *Song) (*Response, error)
+	DeleteSong(context.Context, *Song) (*Response, error)
+	GetPlaylist(context.Context, *Empty) (*Playlist, error)
+	GetSong(context.Context, *Song) (*Song, error)
+	UpdateSong(context.Context, *Song) (*Response, error)
+	Next(context.Context, *Empty) (*Response, error)
+	Prev(context.Context, *Empty) (*Response, error)
 	mustEmbedUnimplementedMusicServiceServer()
 }
 
@@ -102,19 +142,31 @@ type MusicServiceServer interface {
 type UnimplementedMusicServiceServer struct {
 }
 
-func (UnimplementedMusicServiceServer) Play(context.Context, *Empty) (*Empty, error) {
+func (UnimplementedMusicServiceServer) Play(context.Context, *Empty) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Play not implemented")
 }
-func (UnimplementedMusicServiceServer) Pause(context.Context, *Empty) (*Empty, error) {
+func (UnimplementedMusicServiceServer) Pause(context.Context, *Empty) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Pause not implemented")
 }
-func (UnimplementedMusicServiceServer) AddSong(context.Context, *Song) (*Empty, error) {
+func (UnimplementedMusicServiceServer) AddSong(context.Context, *Song) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddSong not implemented")
 }
-func (UnimplementedMusicServiceServer) Next(context.Context, *Empty) (*Empty, error) {
+func (UnimplementedMusicServiceServer) DeleteSong(context.Context, *Song) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteSong not implemented")
+}
+func (UnimplementedMusicServiceServer) GetPlaylist(context.Context, *Empty) (*Playlist, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPlaylist not implemented")
+}
+func (UnimplementedMusicServiceServer) GetSong(context.Context, *Song) (*Song, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetSong not implemented")
+}
+func (UnimplementedMusicServiceServer) UpdateSong(context.Context, *Song) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateSong not implemented")
+}
+func (UnimplementedMusicServiceServer) Next(context.Context, *Empty) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Next not implemented")
 }
-func (UnimplementedMusicServiceServer) Prev(context.Context, *Empty) (*Empty, error) {
+func (UnimplementedMusicServiceServer) Prev(context.Context, *Empty) (*Response, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Prev not implemented")
 }
 func (UnimplementedMusicServiceServer) mustEmbedUnimplementedMusicServiceServer() {}
@@ -184,6 +236,78 @@ func _MusicService_AddSong_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MusicService_DeleteSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Song)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MusicServiceServer).DeleteSong(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/music_service.api.MusicService/DeleteSong",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MusicServiceServer).DeleteSong(ctx, req.(*Song))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MusicService_GetPlaylist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MusicServiceServer).GetPlaylist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/music_service.api.MusicService/GetPlaylist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MusicServiceServer).GetPlaylist(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MusicService_GetSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Song)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MusicServiceServer).GetSong(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/music_service.api.MusicService/GetSong",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MusicServiceServer).GetSong(ctx, req.(*Song))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MusicService_UpdateSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Song)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MusicServiceServer).UpdateSong(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/music_service.api.MusicService/UpdateSong",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MusicServiceServer).UpdateSong(ctx, req.(*Song))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _MusicService_Next_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
@@ -238,6 +362,22 @@ var MusicService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddSong",
 			Handler:    _MusicService_AddSong_Handler,
+		},
+		{
+			MethodName: "DeleteSong",
+			Handler:    _MusicService_DeleteSong_Handler,
+		},
+		{
+			MethodName: "GetPlaylist",
+			Handler:    _MusicService_GetPlaylist_Handler,
+		},
+		{
+			MethodName: "GetSong",
+			Handler:    _MusicService_GetSong_Handler,
+		},
+		{
+			MethodName: "UpdateSong",
+			Handler:    _MusicService_UpdateSong_Handler,
 		},
 		{
 			MethodName: "Next",

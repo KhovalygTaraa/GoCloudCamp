@@ -1,17 +1,19 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"music_service/service"
-	"database/sql"
 	"net"
+	"os"
 	"github.com/KhovalygTaraa/music_service/api"
 	_ "github.com/lib/pq"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	connStr := "user=gocloud password=gocloud dbname=playlist sslmode=disable host=192.168.1.3 port=5432"
+	connStr := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable host=%s port=%s", os.Getenv("POSTGRES_USER"),
+		os.Getenv("POSTGRES_PASSWORD"), os.Getenv("POSTGRES_DB"), os.Getenv("POSTGRES_HOST"), os.Getenv("POSTGRES_PORT"))
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		panic("DB connection error")
@@ -19,7 +21,7 @@ func main() {
 	defer db.Close()
 
 	grpcServer := grpc.NewServer()
-	lis, err := net.Listen("tcp", "192.168.1.2:9000")
+	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%s", os.Getenv("APP_HOST"), os.Getenv("APP_PORT")))
 	if err != nil {
 		fmt.Printf("listen error")
         panic("listen error")

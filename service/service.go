@@ -1,10 +1,12 @@
 package service
 
 import (
-	"context"
 	"container/list"
+	"context"
 	"database/sql"
+	"fmt"
 	"music_service/core"
+	"time"
 	"github.com/KhovalygTaraa/music_service/api"
 )
 
@@ -32,8 +34,24 @@ func getSongsFromDb(db *sql.DB) *list.List{
 	return songs
 }
 
+func isDBAvailable(db *sql.DB) bool{
+	var res bool = true
+
+	_, err := db.Query("select 1")
+	if err != nil {
+		res = false
+    }
+	return res
+}
+
 func NewService(db *sql.DB) api.MusicServiceServer {
 	service := MusicServiceServer{}
+
+	for i := 1; !isDBAvailable(db); i++ {
+        fmt.Printf("Db is unavailable(%ds)\n", i)
+		time.Sleep(1 * time.Second)
+	}
+	fmt.Println("Db is available")
 	songs := getSongsFromDb(db)
 	playlist := core.CreateSimplePlaylist("My favorite playlist", songs, context.Background())
 	service.playlist = playlist
