@@ -1,11 +1,12 @@
 package core
 
-import(
+import (
 	"container/list"
-	"time"
 	"context"
+	"errors"
 	"fmt"
 	"sync"
+	"time"
 )
 
 type Playlist interface {
@@ -98,6 +99,7 @@ func (p *SimplePlaylist) AddSong(song *Song) {
 	p.Songs.PushBack(song)
 	p.coreMtx.Unlock()
 }
+
 func (p *SimplePlaylist) Next() {
 	p.coreMtx.Lock()
 	p.Pause()
@@ -110,6 +112,7 @@ func (p *SimplePlaylist) Next() {
 	p.Play()
 	p.coreMtx.Unlock()
 }
+
 func (p *SimplePlaylist) Prev() {
 	p.coreMtx.Lock()
 	p.Pause()
@@ -121,4 +124,32 @@ func (p *SimplePlaylist) Prev() {
 	}
 	p.Play()
 	p.coreMtx.Unlock()
+}
+
+func (p *SimplePlaylist) DeleteSong(name string) error {
+	var err error = errors.New("not found")
+
+	for node := p.Songs.Front(); node != nil; node = node.Next() {
+		if node.Value.(*Song).Name == name {
+			p.Songs.Remove(node)
+			err = nil
+			break
+		}
+	}
+	return err
+}
+
+func (p *SimplePlaylist) GetSongs() list.List {
+	return *p.Songs
+}
+
+func (p *SimplePlaylist) GetSong(name string) (Song, error) {
+	var song *Song = &Song{Author: "", Name: "", Duration: 0}
+
+	for node := p.Songs.Front(); node != nil; node = node.Next() {
+		if node.Value.(*Song).Name == name {
+			song = node.Value.(*Song)
+		}	
+	}
+	return *song, errors.New("not found")
 }

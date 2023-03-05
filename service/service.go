@@ -4,9 +4,11 @@ import (
 	"container/list"
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"music_service/core"
 	"time"
+
 	"github.com/KhovalygTaraa/music_service/api"
 )
 
@@ -38,6 +40,7 @@ func isDBAvailable(db *sql.DB) bool{
 	var res bool = true
 
 	_, err := db.Query("select 1")
+	
 	if err != nil {
 		res = false
     }
@@ -90,4 +93,55 @@ func (srv MusicServiceServer) Next(ctx context.Context, empty *api.Empty) (*api.
 func (srv MusicServiceServer) Prev(ctx context.Context, empty *api.Empty) (*api.Empty, error) {
 	srv.playlist.Prev()
 	return new(api.Empty), nil
+}
+
+func (srv MusicServiceServer) DeleteSong(ctx context.Context, song *api.Song) (*api.Response, error) {
+	var res *api.Response = nil
+	err := srv.playlist.DeleteSong(song.Name)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
+	_, err = srv.db.Exec("delete from playlist where songname = $1", song.Name)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return nil, err
+	}
+	res = &api.Response{Response: fmt.Sprintf("Song deleted. Name: %s. Author: %s. Duration: %s.", song.Name, song.Author. song.Duration)}
+	return res, err
+}
+
+func (srv MusicServiceServer) GetPlaylist(context.Context, *api.Empty) (*api.Playlist, error) {
+	list := srv.playlist.GetSongs()
+	songsSlice := make([]*api.Song, list.Len())
+	i := 0
+	var err error = nil
+
+	if list.Len() != 0 {
+		for node := list.Front(); node != nil; node = node.Next() {
+			songsSlice[i] = &api.Song{
+				Author: node.Value.(*core.Song).Author,
+				Name: node.Value.(*core.Song).Name,
+				Duration: int64(node.Value.(*core.Song).Duration),
+			}	
+		}
+	} else {
+		err = errors.New("not found")
+	}
+
+	return &api.Playlist{Songs: songsSlice}, err
+}
+
+func (srv MusicServiceServer) GetSong(ctx context.Context, song *api.Song) (*api.Song, error) {
+	var res *api.Song = nil
+	coreSong, err := srv.playlist.GetSong(song.Name)
+
+	if err == nil {
+		res = &api.Song{Author: coreSong.Author, Name: coreSong.Name, Duration: int64(coreSong.Duration)}
+	}
+	return res, err
+}
+
+func (srv MusicServiceServer) UpdateSong(ctx context.Context, song *api.Song) (*api.Response, error) {
+
 }

@@ -3,16 +3,16 @@ module music_service
 go 1.18
 
 require (
-	github.com/KhovalygTaraa/music_service/api v0.0.0-20230303132038-a558a72a5ab6
+	github.com/KhovalygTaraa/music_service/api v0.0.0-20230305203705-7351ad1e058b
 	github.com/lib/pq v1.10.7
 	google.golang.org/grpc v1.53.0
 )
 
 require (
 	github.com/golang/protobuf v1.5.2 // indirect
-	golang.org/x/net v0.7.0 // indirect
-	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/text v0.7.0 // indirect
-	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
+	golang.org/x/net v0.8.0 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/text v0.8.0 // indirect
+	google.golang.org/genproto v0.0.0-20230303212802-e74f57abe488 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )

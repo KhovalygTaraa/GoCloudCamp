@@ -13,13 +13,11 @@ message Playlist {
     repeated Song songs = 1;
 }
 
-message Empty {}
-
 message Response {
-    string data = 1;
-    int64 code = 2;
-    bool isOk = 3;
+    string response = 1;;
 }
+
+message Empty {}
 
 service MusicService {
     rpc Play(Empty) returns(Response);

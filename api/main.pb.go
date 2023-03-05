@@ -130,58 +130,18 @@ func (x *Playlist) GetSongs() []*Song {
 	return nil
 }
 
-type Empty struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-}
-
-func (x *Empty) Reset() {
-	*x = Empty{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_main_proto_msgTypes[2]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *Empty) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Empty) ProtoMessage() {}
-
-func (x *Empty) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_main_proto_msgTypes[2]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
-func (*Empty) Descriptor() ([]byte, []int) {
-	return file_proto_main_proto_rawDescGZIP(), []int{2}
-}
-
 type Response struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Data string `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	Code int64  `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
-	IsOk bool   `protobuf:"varint,3,opt,name=isOk,proto3" json:"isOk,omitempty"`
+	Response string `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
 }
 
 func (x *Response) Reset() {
 	*x = Response{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_proto_main_proto_msgTypes[3]
+		mi := &file_proto_main_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -194,7 +154,7 @@ func (x *Response) String() string {
 func (*Response) ProtoMessage() {}
 
 func (x *Response) ProtoReflect() protoreflect.Message {
-	mi := &file_proto_main_proto_msgTypes[3]
+	mi := &file_proto_main_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -207,28 +167,52 @@ func (x *Response) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Response.ProtoReflect.Descriptor instead.
 func (*Response) Descriptor() ([]byte, []int) {
-	return file_proto_main_proto_rawDescGZIP(), []int{3}
+	return file_proto_main_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *Response) GetData() string {
+func (x *Response) GetResponse() string {
 	if x != nil {
-		return x.Data
+		return x.Response
 	}
 	return ""
 }
 
-func (x *Response) GetCode() int64 {
-	if x != nil {
-		return x.Code
-	}
-	return 0
+type Empty struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
 }
 
-func (x *Response) GetIsOk() bool {
-	if x != nil {
-		return x.IsOk
+func (x *Empty) Reset() {
+	*x = Empty{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_proto_main_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
 	}
-	return false
+}
+
+func (x *Empty) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Empty) ProtoMessage() {}
+
+func (x *Empty) ProtoReflect() protoreflect.Message {
+	mi := &file_proto_main_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Empty.ProtoReflect.Descriptor instead.
+func (*Empty) Descriptor() ([]byte, []int) {
+	return file_proto_main_proto_rawDescGZIP(), []int{3}
 }
 
 var File_proto_main_proto protoreflect.FileDescriptor
@@ -245,12 +229,10 @@ var file_proto_main_proto_rawDesc = []byte{
 	0x74, 0x12, 0x2d, 0x0a, 0x05, 0x73, 0x6f, 0x6e, 0x67, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b,
 	0x32, 0x17, 0x2e, 0x6d, 0x75, 0x73, 0x69, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
 	0x2e, 0x61, 0x70, 0x69, 0x2e, 0x53, 0x6f, 0x6e, 0x67, 0x52, 0x05, 0x73, 0x6f, 0x6e, 0x67, 0x73,
-	0x22, 0x07, 0x0a, 0x05, 0x45, 0x6d, 0x70, 0x74, 0x79, 0x22, 0x46, 0x0a, 0x08, 0x52, 0x65, 0x73,
-	0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x12, 0x12, 0x0a, 0x04, 0x63, 0x6f, 0x64,
-	0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52, 0x04, 0x63, 0x6f, 0x64, 0x65, 0x12, 0x12, 0x0a,
-	0x04, 0x69, 0x73, 0x4f, 0x6b, 0x18, 0x03, 0x20, 0x01, 0x28, 0x08, 0x52, 0x04, 0x69, 0x73, 0x4f,
-	0x6b, 0x32, 0xd7, 0x04, 0x0a, 0x0c, 0x4d, 0x75, 0x73, 0x69, 0x63, 0x53, 0x65, 0x72, 0x76, 0x69,
+	0x22, 0x26, 0x0a, 0x08, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1a, 0x0a, 0x08,
+	0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
+	0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x07, 0x0a, 0x05, 0x45, 0x6d, 0x70, 0x74,
+	0x79, 0x32, 0xd7, 0x04, 0x0a, 0x0c, 0x4d, 0x75, 0x73, 0x69, 0x63, 0x53, 0x65, 0x72, 0x76, 0x69,
 	0x63, 0x65, 0x12, 0x3d, 0x0a, 0x04, 0x50, 0x6c, 0x61, 0x79, 0x12, 0x18, 0x2e, 0x6d, 0x75, 0x73,
 	0x69, 0x63, 0x5f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x2e, 0x61, 0x70, 0x69, 0x2e, 0x45,
 	0x6d, 0x70, 0x74, 0x79, 0x1a, 0x1b, 0x2e, 0x6d, 0x75, 0x73, 0x69, 0x63, 0x5f, 0x73, 0x65, 0x72,
@@ -307,29 +289,29 @@ var file_proto_main_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_main_proto_goTypes = []interface{}{
 	(*Song)(nil),     // 0: music_service.api.Song
 	(*Playlist)(nil), // 1: music_service.api.Playlist
-	(*Empty)(nil),    // 2: music_service.api.Empty
-	(*Response)(nil), // 3: music_service.api.Response
+	(*Response)(nil), // 2: music_service.api.Response
+	(*Empty)(nil),    // 3: music_service.api.Empty
 }
 var file_proto_main_proto_depIdxs = []int32{
 	0,  // 0: music_service.api.Playlist.songs:type_name -> music_service.api.Song
-	2,  // 1: music_service.api.MusicService.Play:input_type -> music_service.api.Empty
-	2,  // 2: music_service.api.MusicService.Pause:input_type -> music_service.api.Empty
+	3,  // 1: music_service.api.MusicService.Play:input_type -> music_service.api.Empty
+	3,  // 2: music_service.api.MusicService.Pause:input_type -> music_service.api.Empty
 	0,  // 3: music_service.api.MusicService.AddSong:input_type -> music_service.api.Song
 	0,  // 4: music_service.api.MusicService.DeleteSong:input_type -> music_service.api.Song
-	2,  // 5: music_service.api.MusicService.GetPlaylist:input_type -> music_service.api.Empty
+	3,  // 5: music_service.api.MusicService.GetPlaylist:input_type -> music_service.api.Empty
 	0,  // 6: music_service.api.MusicService.GetSong:input_type -> music_service.api.Song
 	0,  // 7: music_service.api.MusicService.UpdateSong:input_type -> music_service.api.Song
-	2,  // 8: music_service.api.MusicService.Next:input_type -> music_service.api.Empty
-	2,  // 9: music_service.api.MusicService.Prev:input_type -> music_service.api.Empty
-	3,  // 10: music_service.api.MusicService.Play:output_type -> music_service.api.Response
-	3,  // 11: music_service.api.MusicService.Pause:output_type -> music_service.api.Response
-	3,  // 12: music_service.api.MusicService.AddSong:output_type -> music_service.api.Response
-	3,  // 13: music_service.api.MusicService.DeleteSong:output_type -> music_service.api.Response
+	3,  // 8: music_service.api.MusicService.Next:input_type -> music_service.api.Empty
+	3,  // 9: music_service.api.MusicService.Prev:input_type -> music_service.api.Empty
+	2,  // 10: music_service.api.MusicService.Play:output_type -> music_service.api.Response
+	2,  // 11: music_service.api.MusicService.Pause:output_type -> music_service.api.Response
+	2,  // 12: music_service.api.MusicService.AddSong:output_type -> music_service.api.Response
+	2,  // 13: music_service.api.MusicService.DeleteSong:output_type -> music_service.api.Response
 	1,  // 14: music_service.api.MusicService.GetPlaylist:output_type -> music_service.api.Playlist
 	0,  // 15: music_service.api.MusicService.GetSong:output_type -> music_service.api.Song
-	3,  // 16: music_service.api.MusicService.UpdateSong:output_type -> music_service.api.Response
-	3,  // 17: music_service.api.MusicService.Next:output_type -> music_service.api.Response
-	3,  // 18: music_service.api.MusicService.Prev:output_type -> music_service.api.Response
+	2,  // 16: music_service.api.MusicService.UpdateSong:output_type -> music_service.api.Response
+	2,  // 17: music_service.api.MusicService.Next:output_type -> music_service.api.Response
+	2,  // 18: music_service.api.MusicService.Prev:output_type -> music_service.api.Response
 	10, // [10:19] is the sub-list for method output_type
 	1,  // [1:10] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name
@@ -368,7 +350,7 @@ func file_proto_main_proto_init() {
 			}
 		}
 		file_proto_main_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Empty); i {
+			switch v := v.(*Response); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -380,7 +362,7 @@ func file_proto_main_proto_init() {
 			}
 		}
 		file_proto_main_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*Response); i {
+			switch v := v.(*Empty); i {
 			case 0:
 				return &v.state
 			case 1:
