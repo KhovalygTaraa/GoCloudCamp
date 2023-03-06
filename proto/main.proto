@@ -20,7 +20,7 @@ message Response {
 message Empty {}
 
 service MusicService {
-    rpc Play(Empty) returns(Response);
+    rpc Play(Empty) returns(Response); 
     rpc Pause(Empty) returns(Response);
     rpc AddSong(Song) returns(Response);
     rpc DeleteSong(Song) returns(Response);

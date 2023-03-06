@@ -3,7 +3,7 @@ module music_service
 go 1.18
 
 require (
-	github.com/KhovalygTaraa/music_service/api v0.0.0-20230305203705-7351ad1e058b
+	github.com/KhovalygTaraa/music_service/api v0.0.0-20230305220215-1e2eb2450a8b
 	github.com/lib/pq v1.10.7
 	google.golang.org/grpc v1.53.0
 )

@@ -47,9 +47,9 @@ func CreateSimplePlaylist(name string, songs *list.List, ctx context.Context) *S
 	return p
 }
 
-func (p *SimplePlaylist) Play() {
+func (p *SimplePlaylist) Play() string{
 	if p.isPlaying {
-		return
+		return "already playing"
 	}
 
 	if p.currentSongNode == nil {
@@ -82,25 +82,29 @@ func (p *SimplePlaylist) Play() {
 			}
 		}
 	}()
+	currentSong := p.currentSongNode.Value.(*Song)
+	return fmt.Sprintf("Playing. Song: %s. Author: %s. Duration: %d", currentSong.Name, currentSong.Author, currentSong.Duration)
 }
 
-func (p *SimplePlaylist) Pause() {
+func (p *SimplePlaylist) Pause() string {
 	fmt.Println("Paused")
 	if !p.isPlaying {
-		return
+		return "already paused"
 	}
 	p.isPlaying = false
 	p.pauseCtx()
-
+	return "paused"
 }
-func (p *SimplePlaylist) AddSong(song *Song) {
+func (p *SimplePlaylist) AddSong(song *Song) string {
 	p.coreMtx.Lock()
-	fmt.Printf("New song added. Name: %s. Author: %s. Duration: %ds.", song.Name, song.Author, song.Duration)
+	res := fmt.Sprintf("New song added. Name: %s. Author: %s. Duration: %ds.", song.Name, song.Author, song.Duration)
+	fmt.Println(res)
 	p.Songs.PushBack(song)
 	p.coreMtx.Unlock()
+	return res
 }
 
-func (p *SimplePlaylist) Next() {
+func (p *SimplePlaylist) Next() string {
 	p.coreMtx.Lock()
 	p.Pause()
 	p.currentSongPlayTime = 0
@@ -109,11 +113,12 @@ func (p *SimplePlaylist) Next() {
 	} else {
 		p.currentSongNode = p.currentSongNode.Next()
 	}
-	p.Play()
+	res := p.Play()
 	p.coreMtx.Unlock()
+	return res
 }
 
-func (p *SimplePlaylist) Prev() {
+func (p *SimplePlaylist) Prev() string {
 	p.coreMtx.Lock()
 	p.Pause()
 	p.currentSongPlayTime = 0
@@ -122,34 +127,82 @@ func (p *SimplePlaylist) Prev() {
 	} else {
 		p.currentSongNode = p.currentSongNode.Prev()
 	}
-	p.Play()
+	res := p.Play()
 	p.coreMtx.Unlock()
+	return res
 }
 
-func (p *SimplePlaylist) DeleteSong(name string) error {
-	var err error = errors.New("not found")
+func (p *SimplePlaylist) DeleteSong(name string) (string, error) {
+	p.coreMtx.Lock()
+	var err error
 
-	for node := p.Songs.Front(); node != nil; node = node.Next() {
-		if node.Value.(*Song).Name == name {
-			p.Songs.Remove(node)
-			err = nil
-			break
-		}
+	if p.isPlaying {
+		err = errors.New("song is played, can't delete")
+		p.coreMtx.Unlock()
+		return "song is played, can't delete", err
 	}
-	return err
+	node, err := p.getNode(name)
+	if err != nil {
+		fmt.Println("Error:", err)
+		p.coreMtx.Unlock()
+		return "", err
+	}
+	song := node.Value.(*Song)
+	res := fmt.Sprintf("Song deleted. Name: %s. Author: %s. Duration: %d.", song.Name, song.Author, song.Duration)
+	p.Songs.Remove(node)
+	p.coreMtx.Unlock()
+	return res, err
 }
 
 func (p *SimplePlaylist) GetSongs() list.List {
-	return *p.Songs
+	p.coreMtx.Lock()
+	res := *p.Songs
+	p.coreMtx.Unlock()
+	return res
 }
 
 func (p *SimplePlaylist) GetSong(name string) (Song, error) {
+	p.coreMtx.Lock()
 	var song *Song = &Song{Author: "", Name: "", Duration: 0}
 
-	for node := p.Songs.Front(); node != nil; node = node.Next() {
-		if node.Value.(*Song).Name == name {
-			song = node.Value.(*Song)
+	node, err := p.getNode(name)
+	if err != nil {
+		fmt.Println("Error:", err)
+		p.coreMtx.Unlock()
+		return *song, err
+	}
+	song = node.Value.(*Song)
+	res := *song
+	p.coreMtx.Unlock()
+	return res, err
+}
+
+func (p *SimplePlaylist) UpdateSong(name string, author string, duration int) error {
+	p.coreMtx.Lock()
+	var song *Song
+
+	node, err := p.getNode(name)
+	if err != nil {
+		fmt.Println("Error:", err)
+		p.coreMtx.Unlock()
+		return err
+	}
+	song.Author = author
+	song.Duration = duration
+	node.Value = song
+	p.coreMtx.Unlock()
+	return err
+}
+
+func (p *SimplePlaylist) getNode(name string) (*list.Element, error) {
+	var node *list.Element
+	var err error = errors.New("not found")
+	for e := p.Songs.Front(); e != nil; e = e.Next() {
+		if e.Value.(*Song).Name == name {
+			node = e
+			err = nil
+			break
 		}	
 	}
-	return *song, errors.New("not found")
+	return node, err
 }
